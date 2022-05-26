@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private MyDbManager myDbManager;
     private EditText edName, edDesc;
     private TextView tvText;
+    private Button buttonFeedBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,23 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
+
+        buttonFeedBack = findViewById(R.id.buttonFeedBack);
+        buttonFeedBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvText.setText("");
+                myDbManager.insertToDb(edName.getText().toString().trim(), edDesc.getText().toString().trim());
+                for (String name : myDbManager.getFromDb()) {
+                    tvText.append(name);
+                    tvText.append("\n");
+
+                }
+                edName.getText().clear();
+                edDesc.getText().clear();
+            }
+        });
+
         listViewToys = findViewById(R.id.listViewToys);
         listViewToys.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,17 +85,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickSave(View view) {
-        tvText.setText("");
-            myDbManager.insertToDb(edName.getText().toString().trim(), edDesc.getText().toString().trim());
-            for (String name : myDbManager.getFromDb()) {
-                tvText.append(name);
-                tvText.append("\n");
-
-            }
-            edName.getText().clear();
-            edDesc.getText().clear();
-    }
+//    public void onClickSave(View view) {
+//        tvText.setText("");
+//            myDbManager.insertToDb(edName.getText().toString().trim(), edDesc.getText().toString().trim());
+//            for (String name : myDbManager.getFromDb()) {
+//                tvText.append(name);
+//                tvText.append("\n");
+//
+//            }
+//            edName.getText().clear();
+//            edDesc.getText().clear();
+//    }
 
 
 
